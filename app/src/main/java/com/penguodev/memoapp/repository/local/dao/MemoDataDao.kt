@@ -11,8 +11,11 @@ import com.penguodev.memoapp.model.MemoData
 interface MemoDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(data: MemoData)
+    suspend fun insert(data: MemoData)
 
     @Query("SELECT * FROM MemoData")
     fun getList(): LiveData<List<MemoData>>
+
+    @Query("SELECT * FROM MemoData WHERE id = :id")
+    suspend fun getItem(id: Long): MemoData?
 }

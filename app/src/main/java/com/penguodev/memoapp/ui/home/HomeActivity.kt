@@ -7,6 +7,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.penguodev.memoapp.R
 import com.penguodev.memoapp.databinding.ActivityHomeBinding
+import com.penguodev.memoapp.ui.editor.EditorActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -17,14 +21,20 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+        binding.lifecycleOwner = this
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java).also {
+            binding.viewModel = it
+        }
+        adapter = HomeMemoRcvAdapter().also {
+            binding.recyclerviewHome.adapter = it
+        }
 
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
-        adapter = HomeMemoRcvAdapter()
-
-        viewModel.run {
+        viewModel.apply {
             itemList.observe(this@HomeActivity, Observer {
                 adapter?.submitList(it)
+            })
+            actionOpenEditor.observe(this@HomeActivity, Observer {
+                startActivity(EditorActivity.createActivityIntent(this@HomeActivity, null))
             })
         }
     }
