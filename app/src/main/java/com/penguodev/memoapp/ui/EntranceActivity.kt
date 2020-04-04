@@ -1,9 +1,10 @@
-package com.penguodev.memoapp
+package com.penguodev.memoapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.penguodev.memoapp.R
 
-class MainActivity : AppCompatActivity() {
+class EntranceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
