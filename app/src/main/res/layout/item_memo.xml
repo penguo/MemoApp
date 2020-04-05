@@ -55,9 +55,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:textSize="13sp"
-                    app:date_format='@{"yyyy년 M월 d일 H시 m분에 생성됨"}'
-                    tools:text="2020년 4월 4일 5시 12분에 생성됨"
-                    app:date_format_time="@{item.createTime}"
+                    app:date_format='@{"yyyy년 M월 d일 H시 m분에 수정됨"}'
+                    tools:text="2020년 4월 4일 5시 12분에 수정됨"
+                    app:date_format_time="@{item.lastUpdateTime}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/tv_item_memo_text"
                     app:layout_constraintStart_toStartOf="@id/tv_item_memo_text"

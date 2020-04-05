@@ -13,7 +13,7 @@ interface MemoDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(data: MemoData)
 
-    @Query("SELECT * FROM MemoData")
+    @Query("SELECT * FROM MemoData ORDER BY lastUpdateTime DESC")
     fun getList(): LiveData<List<MemoData>>
 
     @Query("SELECT * FROM MemoData WHERE id = :id")

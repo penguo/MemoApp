@@ -15,6 +15,7 @@ class EditorViewModel(private val app: Application, private val id: Long?) : And
     val prevItem: MemoData? = null
     val memo = MutableLiveData<String>("")
     val createTime = MutableLiveData<Long>(null)
+    val lastUpdateTime = MutableLiveData<Long>(null)
 
     init {
         loadData()
@@ -26,6 +27,7 @@ class EditorViewModel(private val app: Application, private val id: Long?) : And
             withContext(Dispatchers.Default) {
                 memo.postValue(item?.memo ?: "")
                 createTime.postValue(item?.createTime)
+                lastUpdateTime.postValue(item?.lastUpdateTime)
             }
         }
     }
@@ -34,7 +36,8 @@ class EditorViewModel(private val app: Application, private val id: Long?) : And
         viewModelScope.launch {
             val item = MemoData(id,
                     memo.value ?: "",
-                    createTime.value ?: System.currentTimeMillis())
+                    createTime.value ?: System.currentTimeMillis(),
+                    System.currentTimeMillis())
             MemoLocalDatabase.getInstance(app).memoDataDao.insert(item)
             actionFinish.call()
         }
