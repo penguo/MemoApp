@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class MemoData(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
-    val memo: String,
-    val createTime: Long
+        @PrimaryKey(autoGenerate = true) val id: Long?,
+        val memo: String,
+        val createTime: Long,
+        val lastUpdateTime: Long
 )
