@@ -9,4 +9,8 @@ data class MemoData(
         val memo: String,
         val createTime: Long,
         val lastUpdateTime: Long
-)
+) {
+    companion object {
+
+    }
+}

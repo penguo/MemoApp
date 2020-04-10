@@ -19,9 +19,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "API_BASE_URL", '"http://ec2-15-164-234-43.ap-northeast-2.compute.amazonaws.com/api/"'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_BASE_URL", '"http://ec2-15-164-234-43.ap-northeast-2.compute.amazonaws.com/api/"'
         }
     }
 
