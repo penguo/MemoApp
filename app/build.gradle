@@ -4,6 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/user/Works/MemoApp/keystore')
+            storePassword 'penguo123!@#'
+            keyAlias 'memoapp'
+            keyPassword 'penguo123!@#'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
@@ -20,12 +28,15 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '.debug'
             minifyEnabled false
             buildConfigField "String", "API_BASE_URL", '"http://ec2-15-164-234-43.ap-northeast-2.compute.amazonaws.com/api/"'
         }
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled true
             buildConfigField "String", "API_BASE_URL", '"http://ec2-15-164-234-43.ap-northeast-2.compute.amazonaws.com/api/"'
         }
     }
