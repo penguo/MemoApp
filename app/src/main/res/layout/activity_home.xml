@@ -46,7 +46,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="32dp"
             android:onClick="@{viewModel::onClickEditor}"
-            android:src="@drawable/ic_edit_black" />
+            android:src="@drawable/ic_edit_white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

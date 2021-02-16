@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity
 data class MemoData(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     val memo: String,
     val createTime: Long,
     val lastUpdateTime: Long

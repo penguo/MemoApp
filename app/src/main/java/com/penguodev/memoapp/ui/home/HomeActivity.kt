@@ -32,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java).also {
             binding.viewModel = it
         }
-        adapter = HomeMemoRcvAdapter().also {
+        adapter = HomeMemoRcvAdapter(viewModel).also {
             binding.recyclerviewHome.adapter = it
         }
 

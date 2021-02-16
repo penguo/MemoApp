@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.penguodev.memoapp.model.MemoData
+import retrofit2.http.DELETE
 
 @Dao
 interface MemoDataDao {
@@ -18,4 +19,7 @@ interface MemoDataDao {
 
     @Query("SELECT * FROM MemoData WHERE id = :id")
     suspend fun getItem(id: Long): MemoData?
+
+    @Query("DELETE FROM MemoData WHERE id = :id")
+    suspend fun deleteItem(id: Long)
 }

@@ -35,8 +35,8 @@ class EditorViewModel(private val app: Application, private val id: Long?) : And
 
     fun saveData() {
         viewModelScope.launch {
-            val item = MemoData(id,
-                    memo.value ?: "",
+            val item = MemoData(id ?: 0,
+                    memo.value?.trim() ?: "",
                     createTime.value ?: System.currentTimeMillis(),
                     System.currentTimeMillis())
             MemoLocalDatabase.getInstance(app).memoDataDao.insert(item)
