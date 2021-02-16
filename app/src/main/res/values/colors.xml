@@ -6,4 +6,6 @@
 
     <color name="textNormal">#212121</color>
     <color name="textCaption">#777</color>
+
+    <color name="white">#fff</color>
 </resources>

@@ -28,16 +28,14 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="12dp">
 
                 <TextView
                     android:id="@+id/tv_item_memo_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:ellipsize="end"
                     android:hint="빈 메모"
                     android:maxLines="2"
@@ -53,15 +51,15 @@
                     android:id="@+id/tv_item_memo_caption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:textSize="13sp"
-                    app:date_format='@{"yyyy년 M월 d일 H시 m분에 수정됨"}'
-                    tools:text="2020년 4월 4일 5시 12분에 수정됨"
-                    app:date_format_time="@{item.lastUpdateTime}"
+                    android:gravity="end"
+                    android:text="@{item.caption}"
+                    android:textColor="@color/textCaption"
+                    android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/tv_item_memo_text"
                     app:layout_constraintStart_toStartOf="@id/tv_item_memo_text"
-                    app:layout_constraintTop_toBottomOf="@id/tv_item_memo_text" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_item_memo_text"
+                    tools:text="2020년 4월 4일 5시 12분에 수정됨" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

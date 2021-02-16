@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EditorViewModel(private val app: Application, private val id: Long?) : AndroidViewModel(app) {
-    val prevItem: MemoData? = null
+    var prevItem: MemoData? = null
     val memo = MutableLiveData<String>("")
     val createTime = MutableLiveData<Long>(null)
     val lastUpdateTime = MutableLiveData<Long>(null)
@@ -25,6 +25,7 @@ class EditorViewModel(private val app: Application, private val id: Long?) : And
         viewModelScope.launch {
             val item = id?.let { MemoLocalDatabase.getInstance(app).memoDataDao.getItem(id) }
             withContext(Dispatchers.Default) {
+                prevItem = item
                 memo.postValue(item?.memo ?: "")
                 createTime.postValue(item?.createTime)
                 lastUpdateTime.postValue(item?.lastUpdateTime)
