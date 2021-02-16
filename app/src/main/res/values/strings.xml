@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MemoApp</string>
+
+    <string name="memo_empty">빈 메모</string>
+
+    <string name="editor_memo_header_format">yyyy-MM-dd HH:mm updated</string>
+    <string name="editor_memo_header_default">새로운 메모</string>
 </resources>

@@ -75,13 +75,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
-                    app:date_format='@{"yyyy년 M월 d일 H시 m분에 수정됨"}'
-                    app:date_format_default='@{"새로운 메모"}'
+                    app:date_format='@{@string/editor_memo_header_format}'
+                    app:date_format_default='@{@string/editor_memo_header_default}'
                     app:date_format_time="@{viewModel.lastUpdateTime}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="2020년 4월 4일 5시 12분에 수정됨" />
+                    tools:text="@string/editor_memo_header_format" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <FrameLayout
