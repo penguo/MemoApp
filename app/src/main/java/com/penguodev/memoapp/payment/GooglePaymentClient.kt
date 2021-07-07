@@ -12,8 +12,12 @@ import timber.log.Timber
 class GooglePaymentClient(
     private val activity: AppCompatActivity
 ) : PurchasesUpdatedListener {
+
     // TEMP
     val point = MutableLiveData<Int>()
+    private suspend fun addPoint(p: Int) = withContext(Dispatchers.IO) {
+        point.postValue((point.value ?: 0) + p)
+    }
 
     private val billingClient by lazy {
         BillingClient.newBuilder(activity)
@@ -73,19 +77,19 @@ class GooglePaymentClient(
                     .build()
 
                 // give point
-                when (it.skus.first()) {
-                    "point_100" -> addPoint(100)
-                    "point_500" -> addPoint(500)
-                    "point_1000" -> addPoint(1000)
-                }
+                sendPurchase(it.skus.first())
                 billingClient.consumePurchase(params)
             }
         }
     }
 
-    // Temp
-    private suspend fun addPoint(p: Int) = withContext(Dispatchers.IO) {
-        point.postValue((point.value ?: 0) + p)
+    // To Server
+    private suspend fun sendPurchase(sku: String) {
+        when (sku) {
+            "point_100" -> addPoint(100)
+            "point_500" -> addPoint(500)
+            "point_1000" -> addPoint(1000)
+        }
     }
 
     // From Server
