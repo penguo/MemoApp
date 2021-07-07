@@ -1,5 +1,6 @@
 package com.penguodev.memoapp.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,12 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.penguodev.memoapp.R
 import com.penguodev.memoapp.common.InAppReviewHelper
+import com.penguodev.memoapp.common.setVisibleGone
 import com.penguodev.memoapp.databinding.ActivityHomeBinding
+import com.penguodev.memoapp.ui.payment.PaymentActivity
 import com.penguodev.memoapp.ui.editor.EditorActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -53,16 +52,16 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_setting -> {
-                onClickSetting()
+            R.id.menu_person -> {
+                onClickPerson()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onClickSetting() {
+    private fun onClickPerson() {
         AlertDialog.Builder(this)
-            .setItems(arrayOf("리뷰 작성")) { dialog, which ->
+            .setItems(arrayOf("리뷰 작성", "포인트 결제")) { dialog, which ->
                 when (which) {
                     0 -> {
                         InAppReviewHelper.show(this, onSuccess = {
@@ -70,6 +69,9 @@ class HomeActivity : AppCompatActivity() {
                         }, onError = {
                             Toast.makeText(this, "error! $it", Toast.LENGTH_SHORT).show()
                         })
+                    }
+                    1 -> {
+                        startActivity(Intent(this, PaymentActivity::class.java))
                     }
                 }
                 dialog.dismiss()

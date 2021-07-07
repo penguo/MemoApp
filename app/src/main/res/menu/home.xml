@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_setting"
-        android:icon="@drawable/ic_settings_white"
+        android:id="@+id/menu_person"
+        android:icon="@drawable/ic_person_white"
         android:title="setting"
         android:visible="true"
         app:showAsAction="always" />

@@ -1,5 +1,6 @@
 package com.penguodev.memoapp.common
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import java.text.SimpleDateFormat
@@ -12,4 +13,9 @@ fun setDateFormat(view: TextView, format: String?, time: Long?, default: String?
     } else {
         view.text = default ?: ""
     }
+}
+
+@BindingAdapter("v_visibleGone")
+fun setVisibleGone(view: View, show: Boolean?) {
+    view.visibility = if (show == true) View.VISIBLE else View.GONE
 }

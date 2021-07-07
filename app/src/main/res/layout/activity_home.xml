@@ -41,12 +41,22 @@
             tools:listitem="@layout/item_memo" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingactionbutton"
+            v_visibleGone="@{true}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="32dp"
             android:onClick="@{viewModel::onClickEditor}"
             android:src="@drawable/ic_edit_white" />
+
+        <TextView
+            android:id="@+id/textview_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#3000"
+            android:textColor="#000"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
