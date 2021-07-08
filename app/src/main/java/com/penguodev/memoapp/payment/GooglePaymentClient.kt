@@ -88,8 +88,11 @@ class GooglePaymentClient(
                         .setPurchaseToken(it.purchaseToken)
                         .build()
 
-                listener.sendPurchasedSku(it.skus.first())
-//                billingClient.consumePurchase(params)
+                // TODO:: check - 충전 후 아이템 소비 처리? 아이템 소비 처리 후 충전?
+                // 현재는 충전 후 아이템 소비 처리. purchaseToken을 서버에서 저장하고 있으면 만약의 중복 충전을 막을 수 있을듯.
+                listener.sendPurchasedSku(it.skus.first()).also { result ->
+                    if (result) billingClient.consumePurchase(params)
+                }
             }
         }
     }
