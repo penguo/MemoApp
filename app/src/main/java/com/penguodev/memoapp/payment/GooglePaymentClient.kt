@@ -10,39 +10,34 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class GooglePaymentClient(
-    private val activity: AppCompatActivity
+        private val activity: AppCompatActivity,
+        private val listener: PaymentConnectListener
 ) : PurchasesUpdatedListener {
-
-    // TEMP
-    val point = MutableLiveData<Int>()
-    private suspend fun addPoint(p: Int) = withContext(Dispatchers.IO) {
-        point.postValue((point.value ?: 0) + p)
-    }
 
     private val billingClient by lazy {
         BillingClient.newBuilder(activity)
-            .setListener(this)
-            .enablePendingPurchases()
-            .build()
+                .setListener(this)
+                .enablePendingPurchases()
+                .build()
     }
 
-    fun init(onOk: (list: List<SkuDetails>) -> Unit, onError: (responseCode: Int) -> Unit) {
+    init {
         billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            override fun onBillingSetupFinished(setupResult: BillingResult) {
+                if (setupResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     activity.lifecycleScope.launch {
                         val skuDetailsResult = getSkuDetails()
                         if (skuDetailsResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                             // TODO :: empty is error?
-                            onOk(skuDetailsResult.skuDetailsList ?: emptyList())
+                            checkAlreadyPurchases() // 이미 구매한 것 체크
+                            listener.onConnected(skuDetailsResult.skuDetailsList ?: emptyList())
                         } else {
-                            onError(billingResult.responseCode)
+                            listener.onError(skuDetailsResult.billingResult.responseCode, skuDetailsResult.billingResult.debugMessage)
                         }
                     }
                 } else {
-                    onError(billingResult.responseCode)
+                    listener.onError(setupResult.responseCode, setupResult.debugMessage)
                 }
-
             }
 
             /**
@@ -51,63 +46,59 @@ class GooglePaymentClient(
             override fun onBillingServiceDisconnected() {
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
+                listener.onDisconnected()
             }
         })
     }
 
+    interface PaymentConnectListener {
+        fun onConnected(list: List<SkuDetails>)
+
+        fun onError(responseCode: Int, debugMessage: String)
+
+        fun onDisconnected()
+
+        suspend fun requestSkuListFromServer(): List<String>
+
+        suspend fun sendPurchasedSku(sku: String): Boolean
+    }
+
     fun startPaymentFlow(skuDetails: SkuDetails) {
         val flowParams = BillingFlowParams.newBuilder()
-            .setSkuDetails(skuDetails)
-            .build()
+                .setSkuDetails(skuDetails)
+                .build()
         billingClient.launchBillingFlow(activity, flowParams).also {
             Timber.d(it.debugMessage)
         }
     }
 
+    private fun checkAlreadyPurchases() {
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP, ::onPurchasesUpdated)
+    }
+
     override fun onPurchasesUpdated(
-        billingResult: BillingResult,
-        purchased: MutableList<Purchase>?
+            billingResult: BillingResult,
+            purchased: MutableList<Purchase>?
     ) {
         Timber.d("onPurchasesUpdated: ${billingResult.debugMessage}")
         activity.lifecycleScope.launch {
             purchased?.forEach {
                 Timber.d("purchased: ${it}")
                 val params = ConsumeParams.newBuilder()
-                    .setPurchaseToken(it.purchaseToken)
-                    .build()
+                        .setPurchaseToken(it.purchaseToken)
+                        .build()
 
-                // give point
-                sendPurchase(it.skus.first())
-                billingClient.consumePurchase(params)
+                listener.sendPurchasedSku(it.skus.first())
+//                billingClient.consumePurchase(params)
             }
-        }
-    }
-
-    // To Server
-    private suspend fun sendPurchase(sku: String) {
-        when (sku) {
-            "point_100" -> addPoint(100)
-            "point_500" -> addPoint(500)
-            "point_1000" -> addPoint(1000)
-        }
-    }
-
-    // From Server
-    private suspend fun getSkuList(): List<String> {
-        return withContext(Dispatchers.IO) {
-            listOf(
-                "point_100",
-                "point_500",
-                "point_1000"
-            )
         }
     }
 
     // From GooglePlay Server
     private suspend fun getSkuDetails(): SkuDetailsResult {
         val params = SkuDetailsParams.newBuilder()
-            .setSkusList(getSkuList())
-            .setType(BillingClient.SkuType.INAPP)
+                .setSkusList(listener.requestSkuListFromServer())
+                .setType(BillingClient.SkuType.INAPP)
 
         return withContext(Dispatchers.IO) {
             billingClient.querySkuDetails(params.build())
